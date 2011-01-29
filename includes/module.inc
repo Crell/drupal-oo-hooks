@@ -704,6 +704,10 @@ function module_implements($hook, $sort = FALSE, $reset = FALSE) {
         $implementations['#write_cache'] = TRUE;
       }
     }
+
+    if (in_array($hook, array('init', 'menu', 'theme'))) {
+      $implementations[$hook]['system'] = 'system.module';
+    }
   }
 
   return array_keys($implementations[$hook]);
@@ -789,6 +793,7 @@ function module_invoke() {
   $module = $args[0];
   $hook = $args[1];
   unset($args[0], $args[1]);
+
   if (module_hook($module, $hook)) {
     return call_user_func_array($module . '_' . $hook, $args);
   }
@@ -812,10 +817,10 @@ function module_invoke_all() {
   unset($args[0]);
   $return = array();
 
-  dpm($hook);
-  if ($hook == 'init') {
+  print_r('Calling hook: ' . $hook . '<br />');
+  if (in_array($hook, array('init', 'theme', 'menu'))) {
     // The new way.
-    dpm('In OO version');
+    print_r('In OO version' . '<br />');
     foreach (manifest_implements($hook) as $class) {
       $obj = new $class();
       $result = call_user_func_array(array($obj, $hook), $args);
@@ -858,13 +863,12 @@ function manifest_implements($hook) {
         $index = array_merge_recursive($index, $hooks);
       }
     }
+    print "<pre>";
+    print_r($index);
+    print "</pre>";
   }
 
   return !empty($index[$hook]) ? $index[$hook] : array();
-}
-
-interface Hook {
-
 }
 
 

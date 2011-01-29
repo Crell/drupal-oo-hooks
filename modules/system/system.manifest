@@ -1,3 +1,5 @@
 <?php
 
 $hooks['init'] = array('SystemInit');
+$hooks['menu'] = array('SystemRegistry');
+$hooks['theme'] = array('SystemRegistry');

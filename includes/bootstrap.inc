@@ -247,6 +247,12 @@ define('REGISTRY_WRITE_LOOKUP_CACHE', 2);
  */
 define('DRUPAL_PHP_FUNCTION_PATTERN', '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*');
 
+
+interface Hook {
+
+}
+
+
 /**
  * Start the timer with the specified name. If you start and stop the same
  * timer multiple times, the measured intervals will be accumulated.
