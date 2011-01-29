@@ -219,27 +219,24 @@ function locale_menu() {
   return $items;
 }
 
-/**
- * Implements hook_init().
- *
- * Initialize date formats according to the user's current locale.
- */
-function locale_init() {
-  global $conf, $language;
-  include_once DRUPAL_ROOT . '/includes/locale.inc';
+class LocaleInit implements Hook_init {
+  function init() {
+    global $conf, $language;
+    include_once DRUPAL_ROOT . '/includes/locale.inc';
 
-  // For each date type (e.g. long, short), get the localized date format
-  // for the user's current language and override the default setting for it
-  // in $conf. This should happen on all pages except the date and time formats
-  // settings page, where we want to display the site default and not the
-  // localized version.
-  if (strpos($_GET['q'], 'admin/config/regional/date-time/formats') !== 0) {
-    $languages = array($language->language);
+    // For each date type (e.g. long, short), get the localized date format
+    // for the user's current language and override the default setting for it
+    // in $conf. This should happen on all pages except the date and time formats
+    // settings page, where we want to display the site default and not the
+    // localized version.
+    if (strpos($_GET['q'], 'admin/config/regional/date-time/formats') !== 0) {
+      $languages = array($language->language);
 
-    // Setup appropriate date formats for this locale.
-    $formats = locale_get_localized_date_format($languages);
-    foreach ($formats as $format_type => $format) {
-      $conf[$format_type] = $format;
+      // Setup appropriate date formats for this locale.
+      $formats = locale_get_localized_date_format($languages);
+      foreach ($formats as $format_type => $format) {
+        $conf[$format_type] = $format;
+      }
     }
   }
 }
