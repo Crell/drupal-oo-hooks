@@ -252,6 +252,10 @@ interface Hook {
 
 }
 
+interface Hook_init extends Hook {
+  public function init();
+}
+
 
 /**
  * Start the timer with the specified name. If you start and stop the same

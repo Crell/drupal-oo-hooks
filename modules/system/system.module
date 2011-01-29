@@ -1867,10 +1867,6 @@ function system_filetransfer_info() {
   return $backends;
 }
 
-interface Hook_init extends Hook {
-  public function init();
-}
-
 interface Hook_menu {
   public function menu();
 }
@@ -2492,7 +2488,6 @@ class SystemRegistry implements Hook_menu, Hook_theme {
 
 class SystemInit implements Hook_init {
   public function init() {
-    dpm(__CLASS__);
     $path = drupal_get_path('module', 'system');
     // Add the CSS for this module. These aren't in system.info, because they
     // need to be in the CSS_SYSTEM group rather than the CSS_DEFAULT group.

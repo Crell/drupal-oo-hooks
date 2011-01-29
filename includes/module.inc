@@ -823,6 +823,7 @@ function module_invoke_all() {
     print_r('In OO version' . '<br />');
     foreach (manifest_implements($hook) as $class) {
       $obj = new $class();
+      dpm('Calling: ' . $class);
       $result = call_user_func_array(array($obj, $hook), $args);
       if (isset($result) && is_array($result)) {
         $return = array_merge_recursive($return, $result);
