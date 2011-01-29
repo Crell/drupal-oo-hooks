@@ -811,6 +811,27 @@ function module_invoke_all() {
   $hook = $args[0];
   unset($args[0]);
   $return = array();
+
+  $GLOBALS['hooks']['Hook_permission'] = array('SystemPermission');
+  $GLOBALS['hooks']['Hook_init'] = array('SystemInit');
+
+
+  dpm($hook);
+  if ($hook == 'init') {
+    // The new way.
+    dpm('In OO version');
+    foreach ($GLOBALS['hooks']['Hook_' . $hook] as $class) {
+      $obj = new $class();
+      $result = call_user_func_array(array($obj, $hook), $args);
+      if (isset($result) && is_array($result)) {
+        $return = array_merge_recursive($return, $result);
+      }
+      elseif (isset($result)) {
+        $return[] = $result;
+      }
+    }
+  }
+
   foreach (module_implements($hook) as $module) {
     $function = $module . '_' . $hook;
     if (function_exists($function)) {
@@ -824,8 +845,15 @@ function module_invoke_all() {
     }
   }
 
+
   return $return;
 }
+
+
+interface Hook {
+
+}
+
 
 /**
  * @} End of "defgroup hooks".
