@@ -1870,7 +1870,7 @@ interface Hook_init extends Hook {
 
 class SystemInit implements Hook_init {
   public function init() {
-
+    dpm(__CLASS__);
     $path = drupal_get_path('module', 'system');
     // Add the CSS for this module. These aren't in system.info, because they
     // need to be in the CSS_SYSTEM group rather than the CSS_DEFAULT group.

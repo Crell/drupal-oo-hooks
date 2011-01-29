@@ -812,15 +812,11 @@ function module_invoke_all() {
   unset($args[0]);
   $return = array();
 
-  $GLOBALS['hooks']['Hook_permission'] = array('SystemPermission');
-  $GLOBALS['hooks']['Hook_init'] = array('SystemInit');
-
-
   dpm($hook);
   if ($hook == 'init') {
     // The new way.
     dpm('In OO version');
-    foreach ($GLOBALS['hooks']['Hook_' . $hook] as $class) {
+    foreach (manifest_implements($hook) as $class) {
       $obj = new $class();
       $result = call_user_func_array(array($obj, $hook), $args);
       if (isset($result) && is_array($result)) {
@@ -849,6 +845,23 @@ function module_invoke_all() {
   return $return;
 }
 
+
+function manifest_implements($hook) {
+  static $index = array();
+
+  if (empty($index)) {
+    foreach (module_list() as $module) {
+      $path = drupal_get_path('module', $module);
+      $filename = $path . '/' . $module . '.manifest';
+      if (file_exists($filename)) {
+        include_once($filename);
+        $index = array_merge_recursive($index, $hooks);
+      }
+    }
+  }
+
+  return !empty($index[$hook]) ? $index[$hook] : array();
+}
 
 interface Hook {
 

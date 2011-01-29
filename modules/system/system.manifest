@@ -1,0 +1,3 @@
+<?php
+
+$hooks['init'] = array('SystemInit');
